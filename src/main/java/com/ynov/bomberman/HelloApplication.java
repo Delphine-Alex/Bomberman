@@ -22,32 +22,17 @@ public class HelloApplication extends Application {
 
 	private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 
+//	Initialisation du joueur
 	Character playerOne = new Character(new ImageView(new Image("/RPGMaker.png")));
+
 	static Pane root = new Pane();
 
 	@Override
 	public void start(Stage stage) throws IOException {
+//		736 = 23 tuile * 32 px ; 416 = 13 tuiles * 32px
 		root.setPrefSize(736, 416);
 
-//		Should generate map here
-//		13 / 23
-//		***********************		23 * 32px = 736
-//		***********************
-//		***********************
-//		***********************
-//		***********************
-//		***********************
-//		***********************
-//		***********************
-//		***********************
-//		***********************
-//		***********************
-//		***********************
-//		***********************
-//		32px * 13 = 416px
-//		total tuiles = 23 * 13 = 299
-//		Map here
-
+//		Sauvegarde de toute les tuiles de la carte
 		ArrayList<Rectangle> mapPlaces = new ArrayList<>();
 		int xPass = 0;
 		while (xPass != 23) {
@@ -66,11 +51,14 @@ public class HelloApplication extends Application {
 
 		root.getChildren().add(playerOne);
 
+//		On génere la scene
 		Scene scene = new Scene(root);
 
+//		On active le support d'entrée du clavier
 		scene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
 		scene.setOnKeyReleased(event -> keys.put(event.getCode(), false));
 
+//		Actions en boucle
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
@@ -86,6 +74,7 @@ public class HelloApplication extends Application {
 		stage.show();
 	}
 
+//	characterMovement prend en charge les mouvement du joueur
 	public void characterMovement() {
 		if (isPress(KeyCode.Z)) {
 			playerOne.charachterAnimation.play();
@@ -108,6 +97,7 @@ public class HelloApplication extends Application {
 		}
 	}
 
+//	bombHandler supporte la pose et l'explosion des bombes du joueur
 	public void bombHandler(ArrayList<Rectangle> mapPlaces) {
 		if (playerOne.bombExplosed) {
 			root.getChildren().remove(playerOne.bomb);

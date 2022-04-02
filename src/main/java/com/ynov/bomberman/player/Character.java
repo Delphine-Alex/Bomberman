@@ -15,7 +15,7 @@ import javafx.util.Duration;
 
 public class Character extends Pane {
 
-//	Character configuration
+//	Configuration du personnage du joueur
 	ImageView imageView;
 	int count = 3;
 	int columns = 3;
@@ -30,8 +30,8 @@ public class Character extends Pane {
 	public boolean bombExplosed = false;
 	public Timer timerBomb;
 
+//	Character est le constructeur du personnage
 	public Character(ImageView imageView) {
-
 		this.imageView = imageView;
 		this.imageView.setViewport(new Rectangle2D(offSetX, offSetY, width, height));
 		charachterAnimation = new SpriteHandler(imageView, Duration.millis(200), count, columns, offSetX, offSetY,
@@ -40,6 +40,7 @@ public class Character extends Pane {
 		getChildren().addAll(imageView);
 	}
 
+//	moveX permet le mouvement du personnage sur l'axe X
 	public void moveX(int x) {
 		boolean right = x > 0 ? true : false;
 		for (int i = 0; i < Math.abs(x); i++) {
@@ -51,6 +52,7 @@ public class Character extends Pane {
 		}
 	}
 
+//	moveY permet le mouvement du personnage sur l'axe Y
 	public void moveY(int y) {
 		boolean right = y > 0 ? true : false;
 		for (int i = 0; i < Math.abs(y); i++) {
@@ -62,6 +64,7 @@ public class Character extends Pane {
 		}
 	}
 
+//	generateBombe permet de générer une bombe sur la tuile du personnage
 	public Circle generateBomb(ArrayList<Rectangle> mapPlaces) {
 		this.bombPlanted = true;
 

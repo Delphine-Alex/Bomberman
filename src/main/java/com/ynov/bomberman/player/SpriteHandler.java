@@ -17,6 +17,7 @@ public class SpriteHandler extends Transition {
 	private final int width;
 	private final int height;
 
+//	SpriteHandler est le constructeur de la class
 	public SpriteHandler(ImageView imageView, Duration duration, int count, int columns, int offsetX, int offsetY,
 			int width, int height) {
 		this.imageView = imageView;
@@ -33,14 +34,17 @@ public class SpriteHandler extends Transition {
 		this.imageView.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
 	}
 
+//	Met a jour le sprite en X
 	public void setOffsetX(int offsetX) {
 		this.offsetX = offsetX;
 	}
 
+//	Met a jour le sprite en Y
 	public void setOffsetY(int offsetY) {
 		this.offsetY = offsetY;
 	}
 
+//	permet de faire le changement d'image du sprite pour chaque déplacement
 	protected void interpolate(double frac) {
 		final int index = Math.min((int) Math.floor(count * frac), count - 1);
 		final int x = (index % columns) * width + offsetX;
