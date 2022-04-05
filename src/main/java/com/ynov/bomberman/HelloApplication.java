@@ -8,51 +8,82 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.ynov.bomberman.player.Character;
+import com.ynov.bomberman.stage.Game;
 
 public class HelloApplication extends Application {
-
+    
+    public static final int WIDTH = 736;
+    public static final int HEIGHT = 466;
+    
 	private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 
 //	Initialisation du joueur
 	Character playerOne = new Character(new ImageView(new Image("/RPGMaker.png")));
-
+	
 	static Pane root = new Pane();
 
 	@Override
 	public void start(Stage stage) throws IOException {
-//		736 = 23 tuile * 32 px ; 416 = 13 tuiles * 32px
-		root.setPrefSize(736, 416);
-
-//		Sauvegarde de toute les tuiles de la carte
+		
+		root.setPrefSize(WIDTH, HEIGHT);
+		
 		ArrayList<Rectangle> mapPlaces = new ArrayList<>();
-		int xPass = 0;
-		while (xPass != 23) {
-			int yPass = 0;
-			while (yPass != 13) {
-				Rectangle tuile = new Rectangle(xPass * 32, yPass * 32, 32, 32);
-				tuile.setFill(Color.PINK);
-				tuile.setStroke(Color.PURPLE);
-				tuile.setStrokeWidth(3);
-				mapPlaces.add(tuile);
-				root.getChildren().add(tuile);
-				yPass++;
+
+		for (int y = 0; y < Game.LEVEL1.length; y++) {
+			String ligne = Game.LEVEL1[y];
+			//System.out.println(ligne);
+			
+			String[] tile = ligne.split("");
+			for (int x = 0; x < tile.length; x++) {
+				//System.out.println(tile[j]);
+				
+				Rectangle bloc = new Rectangle(x * 32, y * 32 + 50, 32, 32);
+				
+				switch (tile[x]) {
+				case "0":
+					Image wall = new Image("/Wall.png");
+					bloc.setFill(new ImagePattern(wall));
+					break;
+				case "1":
+					Image grass = new Image("/Grass.png");
+					bloc.setFill(new ImagePattern(grass));
+					break;
+				case "2":
+					Image brick = new Image("/Brick.png");
+					bloc.setFill(new ImagePattern(brick));
+					break;
+				default:
+					break;
+				}
+				mapPlaces.add(bloc);
+				root.getChildren().add(bloc);
+				
 			}
-			xPass++;
 		}
 
 		root.getChildren().add(playerOne);
 
 //		On génere la scene
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, Color.GREY);
+		
+		Text text = new Text();
+		text.setText("Time");
+		text.setX(20);
+		text.setY(10);
+		root.getChildren().add(text);
+		text.setFill(Color.WHITE);
+		text.setFont(Font.font("Verdana",50));
 
 //		On active le support d'entrée du clavier
 		scene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
@@ -74,7 +105,7 @@ public class HelloApplication extends Application {
 		stage.show();
 	}
 
-//	characterMovement prend en charge les mouvement du joueur
+//	characterMovement prend en charge les mouvements du joueur
 	public void characterMovement() {
 		if (isPress(KeyCode.Z)) {
 			playerOne.charachterAnimation.play();
