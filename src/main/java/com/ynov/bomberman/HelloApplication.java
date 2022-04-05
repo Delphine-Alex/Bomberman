@@ -79,11 +79,11 @@ public class HelloApplication extends Application {
 		
 		Text text = new Text();
 		text.setText("Time");
-		text.setX(20);
-		text.setY(10);
+		text.setX(25);
+		text.setY(32);
 		root.getChildren().add(text);
 		text.setFill(Color.WHITE);
-		text.setFont(Font.font("Verdana",50));
+		text.setFont(Font.font("Verdana", 25));
 
 //		On active le support d'entrée du clavier
 		scene.setOnKeyPressed(event -> keys.put(event.getCode(), true));

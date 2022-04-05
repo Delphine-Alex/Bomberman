@@ -33,6 +33,8 @@ public class Character extends Pane {
 //	Character est le constructeur du personnage
 	public Character(ImageView imageView) {
 		this.imageView = imageView;
+		this.moveX(32);
+		this.moveY(82);
 		this.imageView.setViewport(new Rectangle2D(offSetX, offSetY, width, height));
 		charachterAnimation = new SpriteHandler(imageView, Duration.millis(200), count, columns, offSetX, offSetY,
 				width, height);
