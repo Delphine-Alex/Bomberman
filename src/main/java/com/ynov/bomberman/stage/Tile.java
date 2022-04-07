@@ -9,7 +9,9 @@ public class Tile {
 
 	public boolean isBreakable;
 
-	public Tile(Rectangle tile, String tileID) {
+	public int pos;
+
+	public Tile(Rectangle tile, String tileID, int pos) {
 		this.tile = tile;
 		switch (tileID) {
 		case "0":
@@ -31,5 +33,6 @@ public class Tile {
 			this.isBreakable = false;
 			break;
 		}
+		this.pos = pos;
 	}
 }

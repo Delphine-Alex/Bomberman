@@ -1,6 +1,7 @@
 package com.ynov.bomberman.player;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -69,7 +70,7 @@ public class Character extends Pane {
 	}
 
 //	generateBombe permet de générer une bombe sur la tuile du personnage
-	public Circle generateBomb(ArrayList<Tile> mapPlaces) {
+	public Circle generateBomb(Tile[] mapPlaces) {
 		this.bombPlanted = true;
 
 		this.timerBomb = new Timer();
@@ -79,20 +80,27 @@ public class Character extends Pane {
 			public void run() {
 				bombPlanted = false;
 				bombExplosed = true;
-				System.out.println("Bomb explosed");
 
 				cancel();
 			}
 		};
 		this.timerBomb.schedule(task, 3000L);
 
-		for (Tile rectangle : mapPlaces) {
-			if (rectangle.tile.intersects(this.getBoundsInParent().getCenterX() - 32,
+		for (Tile tiles : mapPlaces) {
+			if (tiles.tile.intersects(this.getBoundsInParent().getCenterX() - 32,
 					this.getBoundsInParent().getCenterY() - 32, width, height)) {
-				this.bomb = new Circle(rectangle.tile.getX() + 32 / 2, rectangle.tile.getY() + 32 / 2, 10,
+				this.bomb = new Circle(tiles.tile.getX() + 32 / 2, tiles.tile.getY() + 32 / 2, 10,
 						new ImagePattern(new Image("/Bomb.png")));
 			}
 		}
+
+//		for (int i = 0; i < mapPlaces.length -1; i++) {
+//			if (mapPlaces[i].tile.intersects(this.getBoundsInParent().getCenterX() - 32,
+//					this.getBoundsInParent().getCenterY() - 32, width, height)) {
+//				this.bomb = new Circle(mapPlaces[i].tile.getX() + 32 / 2, mapPlaces[i].tile.getY() + 32 / 2, 10,
+//						new ImagePattern(new Image("/Bomb.png")));
+//			}
+//		}
 
 		return this.bomb;
 	}
