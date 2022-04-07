@@ -11,8 +11,15 @@ public class Tile {
 
 	public int pos;
 
-	public Tile(Rectangle tile, String tileID, int pos) {
-		this.tile = tile;
+	public Tile(int x, int y, String tileID, int pos) {
+		this.tile = new Rectangle(x * 32, y * 32 + 50, 32, 32);
+		
+		this.setStyle(tileID);
+		
+		this.pos = pos;
+	}
+	
+	public void setStyle(String tileID) {
 		switch (tileID) {
 		case "0":
 			Image wall = new Image("/Wall.png");
@@ -33,6 +40,5 @@ public class Tile {
 			this.isBreakable = false;
 			break;
 		}
-		this.pos = pos;
 	}
 }

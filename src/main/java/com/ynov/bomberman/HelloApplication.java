@@ -118,7 +118,7 @@ public class HelloApplication extends Application {
 			int x = 0;
 
 			for (String type : line.split("")) {
-				Tile bloc = new Tile(new Rectangle(x * 32, y * 32 + 50, 32, 32), type, total);
+				Tile bloc = new Tile(x, y, type, total);
 
 				mapPlaces[total] = bloc;
 
@@ -195,28 +195,19 @@ public class HelloApplication extends Application {
 						&& playerOne.bomb.getCenterY() - 16 == mapPlaces[i].tile.getY()) {
 
 					if (mapPlaces[i + 1].isBreakable) {
-						mapPlaces[i + 1] = new Tile(mapPlaces[i + 1].tile, "1", mapPlaces[i + 1].pos);
-						group.getChildren().remove(mapPlaces[i + 1].tile);
-						group.getChildren().add(mapPlaces[i + 1].tile);
-
+						mapPlaces[i + 1].setStyle("1");
 					}
 
 					if (mapPlaces[i - 1].isBreakable) {
-						mapPlaces[i - 1] = new Tile(mapPlaces[i - 1].tile, "1", mapPlaces[i - 1].pos);
-						group.getChildren().remove(mapPlaces[i - 1].tile);
-						group.getChildren().add(mapPlaces[i - 1].tile);
+						mapPlaces[i + 1].setStyle("1");
 					}
 
 					if (mapPlaces[i + 23].isBreakable) {
-						mapPlaces[i + 23] = new Tile(mapPlaces[i + 23].tile, "1", mapPlaces[i + 23].pos);
-						group.getChildren().remove(mapPlaces[i + 23].tile);
-						group.getChildren().add(mapPlaces[i + 23].tile);
+						mapPlaces[i + 1].setStyle("1");
 					}
 
 					if (mapPlaces[i - 23].isBreakable) {
-						mapPlaces[i - 23] = new Tile(mapPlaces[i - 23].tile, "1", mapPlaces[i - 23].pos);
-						group.getChildren().remove(mapPlaces[i - 23].tile);
-						group.getChildren().add(mapPlaces[i - 23].tile);
+						mapPlaces[i + 1].setStyle("1");
 					}
 
 					playerOne.toFront();
