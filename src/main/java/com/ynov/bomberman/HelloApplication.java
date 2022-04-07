@@ -29,6 +29,7 @@ import com.ynov.bomberman.menu.MenuItem;
 import com.ynov.bomberman.menu.Title;
 import com.ynov.bomberman.player.Character;
 import com.ynov.bomberman.stage.Game;
+import com.ynov.bomberman.stage.Tile;
 
 public class HelloApplication extends Application {
     
@@ -105,7 +106,7 @@ public class HelloApplication extends Application {
 	
 	private Group initGame(){
 //		Sauvegarde de toute les tuiles de la carte
-		ArrayList<Rectangle> mapPlaces = new ArrayList<>();
+		ArrayList<Tile> mapPlaces = new ArrayList<>();
 		for (int y = 0; y < Game.LEVEL1.length; y++) {
 			String ligne = Game.LEVEL1[y];
 			//System.out.println(ligne);
@@ -114,26 +115,11 @@ public class HelloApplication extends Application {
 			for (int x = 0; x < tile.length; x++) {
 				//System.out.println(tile[j]);
 				
-				Rectangle bloc = new Rectangle(x * 32, y * 32 + 50, 32, 32);
+				Tile bloc = new Tile(new Rectangle(x * 32, y * 32 + 50, 32, 32), tile[x]);
 				
-				switch (tile[x]) {
-				case "0":
-					Image wall = new Image("/Wall.png");
-					bloc.setFill(new ImagePattern(wall));
-					break;
-				case "1":
-					Image grass = new Image("/Grass.png");
-					bloc.setFill(new ImagePattern(grass));
-					break;
-				case "2":
-					Image brick = new Image("/Brick.png");
-					bloc.setFill(new ImagePattern(brick));
-					break;
-				default:
-					break;
-				}
+				
 				mapPlaces.add(bloc);
-				group.getChildren().add(bloc);
+				group.getChildren().add(bloc.tile);
 				
 			}
 		}
@@ -185,9 +171,9 @@ public class HelloApplication extends Application {
 	}
 
 //	bombHandler supporte la pose et l'explosion des bombes du joueur
-	public void bombHandler(ArrayList<Rectangle> mapPlaces) {
+	public void bombHandler(ArrayList<Tile> mapPlaces) {
 		if (playerOne.bombExplosed) {
-			group.getChildren().remove(playerOne.bomb);
+			group.getChildren().remove(playerOne.bomb);			
 			playerOne.bombExplosed = false;
 		}
 

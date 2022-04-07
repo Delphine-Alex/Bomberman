@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.ynov.bomberman.stage.Tile;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -67,7 +69,7 @@ public class Character extends Pane {
 	}
 
 //	generateBombe permet de générer une bombe sur la tuile du personnage
-	public Circle generateBomb(ArrayList<Rectangle> mapPlaces) {
+	public Circle generateBomb(ArrayList<Tile> mapPlaces) {
 		this.bombPlanted = true;
 
 		this.timerBomb = new Timer();
@@ -84,10 +86,10 @@ public class Character extends Pane {
 		};
 		this.timerBomb.schedule(task, 3000L);
 
-		for (Rectangle rectangle : mapPlaces) {
-			if (rectangle.intersects(this.getBoundsInParent().getCenterX() - 32,
+		for (Tile rectangle : mapPlaces) {
+			if (rectangle.tile.intersects(this.getBoundsInParent().getCenterX() - 32,
 					this.getBoundsInParent().getCenterY() - 32, width, height)) {
-				this.bomb = new Circle(rectangle.getX() + 32 / 2, rectangle.getY() + 32 / 2, 10,
+				this.bomb = new Circle(rectangle.tile.getX() + 32 / 2, rectangle.tile.getY() + 32 / 2, 10,
 						new ImagePattern(new Image("/Bomb.png")));
 			}
 		}
