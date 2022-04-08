@@ -110,21 +110,18 @@ public class HelloApplication extends Application {
 		Tile[] mapPlaces = new Tile[299];
 
 		int y = 0;
-
-		int total = 0;
+		int pos = 0;
 
 		for (String line : Game.LEVEL1) {
-
 			int x = 0;
-
 			for (String type : line.split("")) {
-				Tile bloc = new Tile(x, y, type, total);
+				Tile bloc = new Tile(x, y, type, pos);
 
-				mapPlaces[total] = bloc;
+				mapPlaces[pos] = bloc;
 
 				group.getChildren().add(bloc.tile);
 				x++;
-				total++;
+				pos++;
 			}
 			y++;
 		}
@@ -142,7 +139,7 @@ public class HelloApplication extends Application {
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				characterMovement();
+				characterMovement(mapPlaces);
 
 				bombHandler(mapPlaces);
 			}
@@ -153,23 +150,88 @@ public class HelloApplication extends Application {
 	}
 
 //	characterMovement prend en charge les mouvements du joueur
-	public void characterMovement() {
+	public void characterMovement(Tile[] mapPlaces) {
+
 		if (isPress(KeyCode.Z)) {
-			playerOne.charachterAnimation.play();
-			playerOne.charachterAnimation.setOffsetY(96);
-			playerOne.moveY(-2);
+			for (int i = 0; i < mapPlaces.length; i++) {
+				if ((playerOne.getBoundsInParent().getCenterX() >= mapPlaces[i].tile.getX()
+						&& playerOne.getBoundsInParent().getCenterX() <= mapPlaces[i].tile.getX() + 32)
+						&& (playerOne.getBoundsInParent().getCenterY() - 2 >= mapPlaces[i].tile.getY()
+								&& playerOne.getBoundsInParent().getCenterY() - 2 <= mapPlaces[i].tile.getY() + 32)) {
+					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
+					System.out.println("Player is on case " + playerOne.pos + "from player infos");
+					if (mapPlaces[i].isWalkable) {
+						playerOne.charachterAnimation.play();
+						playerOne.charachterAnimation.setOffsetY(96);
+						playerOne.moveY(-2);
+						playerOne.pos = mapPlaces[i].pos;
+					} else {
+						playerOne.charachterAnimation.stop();
+					}
+					break;
+				}
+			}
+
 		} else if (isPress(KeyCode.S)) {
-			playerOne.charachterAnimation.play();
-			playerOne.charachterAnimation.setOffsetY(0);
-			playerOne.moveY(2);
+
+			for (int i = 0; i < mapPlaces.length; i++) {
+				if ((playerOne.getBoundsInParent().getCenterX() >= mapPlaces[i].tile.getX()
+						&& playerOne.getBoundsInParent().getCenterX() <= mapPlaces[i].tile.getX() + 32)
+						&& (playerOne.getBoundsInParent().getCenterY() + 2 >= mapPlaces[i].tile.getY()
+								&& playerOne.getBoundsInParent().getCenterY() + 2 <= mapPlaces[i].tile.getY() + 32)) {
+					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
+					System.out.println("Player is on case " + playerOne.pos + "from player infos");
+					if (mapPlaces[i].isWalkable) {
+						playerOne.charachterAnimation.play();
+						playerOne.charachterAnimation.setOffsetY(0);
+						playerOne.moveY(2);
+						playerOne.pos = mapPlaces[i].pos;
+					} else {
+						playerOne.charachterAnimation.stop();
+					}
+					break;
+				}
+			}
 		} else if (isPress(KeyCode.D)) {
-			playerOne.charachterAnimation.play();
-			playerOne.charachterAnimation.setOffsetY(64);
-			playerOne.moveX(2);
+
+			for (int i = 0; i < mapPlaces.length; i++) {
+				if ((playerOne.getBoundsInParent().getCenterX() + 2 >= mapPlaces[i].tile.getX()
+						&& playerOne.getBoundsInParent().getCenterX() + 2 <= mapPlaces[i].tile.getX() + 32)
+						&& (playerOne.getBoundsInParent().getCenterY() >= mapPlaces[i].tile.getY()
+								&& playerOne.getBoundsInParent().getCenterY() <= mapPlaces[i].tile.getY() + 32)) {
+					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
+					System.out.println("Player is on case " + playerOne.pos + "from player infos");
+					if (mapPlaces[i].isWalkable) {
+						playerOne.charachterAnimation.play();
+						playerOne.charachterAnimation.setOffsetY(64);
+						playerOne.moveX(2);
+						playerOne.pos = mapPlaces[i].pos;
+					} else {
+						playerOne.charachterAnimation.stop();
+					}
+					break;
+				}
+			}
+
 		} else if (isPress(KeyCode.Q)) {
-			playerOne.charachterAnimation.play();
-			playerOne.charachterAnimation.setOffsetY(32);
-			playerOne.moveX(-2);
+			for (int i = 0; i < mapPlaces.length; i++) {
+				if ((playerOne.getBoundsInParent().getCenterX() - 2 >= mapPlaces[i].tile.getX()
+						&& playerOne.getBoundsInParent().getCenterX() - 2 <= mapPlaces[i].tile.getX() + 32)
+						&& (playerOne.getBoundsInParent().getCenterY() >= mapPlaces[i].tile.getY()
+								&& playerOne.getBoundsInParent().getCenterY() <= mapPlaces[i].tile.getY() + 32)) {
+					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
+					System.out.println("Player is on case " + playerOne.pos + "from player infos");
+					if (mapPlaces[i].isWalkable) {
+						playerOne.charachterAnimation.play();
+						playerOne.charachterAnimation.setOffsetY(32);
+						playerOne.moveX(-2);
+						playerOne.pos = mapPlaces[i].pos;
+					} else {
+						playerOne.charachterAnimation.stop();
+					}
+					break;
+				}
+			}
 		} else {
 			playerOne.charachterAnimation.stop();
 		}
@@ -199,15 +261,15 @@ public class HelloApplication extends Application {
 					}
 
 					if (mapPlaces[i - 1].isBreakable) {
-						mapPlaces[i + 1].setStyle("1");
+						mapPlaces[i - 1].setStyle("1");
 					}
 
 					if (mapPlaces[i + 23].isBreakable) {
-						mapPlaces[i + 1].setStyle("1");
+						mapPlaces[i + 23].setStyle("1");
 					}
 
 					if (mapPlaces[i - 23].isBreakable) {
-						mapPlaces[i + 1].setStyle("1");
+						mapPlaces[i - 23].setStyle("1");
 					}
 
 					playerOne.toFront();

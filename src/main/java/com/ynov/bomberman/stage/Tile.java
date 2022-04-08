@@ -8,6 +8,7 @@ public class Tile {
 	public Rectangle tile;
 
 	public boolean isBreakable;
+	public boolean isWalkable;
 
 	public int pos;
 
@@ -25,16 +26,19 @@ public class Tile {
 			Image wall = new Image("/Wall.png");
 			tile.setFill(new ImagePattern(wall));
 			this.isBreakable = false;
+			this.isWalkable = false;
 			break;
 		case "1":
 			Image grass = new Image("/Grass.png");
 			tile.setFill(new ImagePattern(grass));
 			this.isBreakable = false;
+			this.isWalkable = true;
 			break;
 		case "2":
 			Image brick = new Image("/Brick.png");
 			tile.setFill(new ImagePattern(brick));
 			this.isBreakable = true;
+			this.isWalkable = false;
 			break;
 		default:
 			this.isBreakable = false;

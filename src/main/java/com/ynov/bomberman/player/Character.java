@@ -27,6 +27,8 @@ public class Character extends Pane {
 	int width = 32;
 	int height = 32;
 	public SpriteHandler charachterAnimation;
+	
+	public int pos = 24;
 
 	public Circle bomb;
 	public boolean bombPlanted = false;
@@ -87,10 +89,11 @@ public class Character extends Pane {
 		this.timerBomb.schedule(task, 3000L);
 
 		for (Tile tiles : mapPlaces) {
-			if (tiles.tile.intersects(this.getBoundsInParent().getCenterX() - 32,
-					this.getBoundsInParent().getCenterY() - 32, width, height)) {
+			if (tiles.tile.intersects(this.getBoundsInParent().getCenterX(),
+					this.getBoundsInParent().getCenterY(), width, height)) {
 				this.bomb = new Circle(tiles.tile.getX() + 32 / 2, tiles.tile.getY() + 32 / 2, 10,
 						new ImagePattern(new Image("/Bomb.png")));
+				break;
 			}
 		}
 
