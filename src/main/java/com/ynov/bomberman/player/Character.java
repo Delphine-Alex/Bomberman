@@ -86,11 +86,11 @@ public class Character extends Pane {
 				cancel();
 			}
 		};
-		this.timerBomb.schedule(task, 3000L);
+		this.timerBomb.schedule(task, 1500L);
 
 		for (Tile tiles : mapPlaces) {
 			if (tiles.tile.intersects(this.getBoundsInParent().getCenterX(),
-					this.getBoundsInParent().getCenterY(), width, height)) {
+					this.getBoundsInParent().getCenterY() + 16, width, height)) {
 				this.bomb = new Circle(tiles.tile.getX() + 32 / 2, tiles.tile.getY() + 32 / 2, 10,
 						new ImagePattern(new Image("/Bomb.png")));
 				break;

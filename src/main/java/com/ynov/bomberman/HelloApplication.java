@@ -156,8 +156,9 @@ public class HelloApplication extends Application {
 			for (int i = 0; i < mapPlaces.length; i++) {
 				if ((playerOne.getBoundsInParent().getCenterX() >= mapPlaces[i].tile.getX()
 						&& playerOne.getBoundsInParent().getCenterX() <= mapPlaces[i].tile.getX() + 32)
-						&& (playerOne.getBoundsInParent().getCenterY() - 2 >= mapPlaces[i].tile.getY()
-								&& playerOne.getBoundsInParent().getCenterY() - 2 <= mapPlaces[i].tile.getY() + 32)) {
+						&& (playerOne.getBoundsInParent().getCenterY() - 2 + 16 >= mapPlaces[i].tile.getY()
+								&& playerOne.getBoundsInParent().getCenterY() - 2 + 16 <= mapPlaces[i].tile.getY()
+										+ 32)) {
 					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
 					System.out.println("Player is on case " + playerOne.pos + "from player infos");
 					if (mapPlaces[i].isWalkable) {
@@ -177,8 +178,9 @@ public class HelloApplication extends Application {
 			for (int i = 0; i < mapPlaces.length; i++) {
 				if ((playerOne.getBoundsInParent().getCenterX() >= mapPlaces[i].tile.getX()
 						&& playerOne.getBoundsInParent().getCenterX() <= mapPlaces[i].tile.getX() + 32)
-						&& (playerOne.getBoundsInParent().getCenterY() + 2 >= mapPlaces[i].tile.getY()
-								&& playerOne.getBoundsInParent().getCenterY() + 2 <= mapPlaces[i].tile.getY() + 32)) {
+						&& (playerOne.getBoundsInParent().getCenterY() + 2 + 16 >= mapPlaces[i].tile.getY()
+								&& playerOne.getBoundsInParent().getCenterY() + 2 + 16 <= mapPlaces[i].tile.getY()
+										+ 32)) {
 					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
 					System.out.println("Player is on case " + playerOne.pos + "from player infos");
 					if (mapPlaces[i].isWalkable) {
@@ -195,10 +197,11 @@ public class HelloApplication extends Application {
 		} else if (isPress(KeyCode.D)) {
 
 			for (int i = 0; i < mapPlaces.length; i++) {
+
 				if ((playerOne.getBoundsInParent().getCenterX() + 2 >= mapPlaces[i].tile.getX()
 						&& playerOne.getBoundsInParent().getCenterX() + 2 <= mapPlaces[i].tile.getX() + 32)
-						&& (playerOne.getBoundsInParent().getCenterY() >= mapPlaces[i].tile.getY()
-								&& playerOne.getBoundsInParent().getCenterY() <= mapPlaces[i].tile.getY() + 32)) {
+						&& (playerOne.getBoundsInParent().getCenterY() + 16 >= mapPlaces[i].tile.getY()
+								&& playerOne.getBoundsInParent().getCenterY() + 16 <= mapPlaces[i].tile.getY() + 32)) {
 					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
 					System.out.println("Player is on case " + playerOne.pos + "from player infos");
 					if (mapPlaces[i].isWalkable) {
@@ -217,15 +220,15 @@ public class HelloApplication extends Application {
 			for (int i = 0; i < mapPlaces.length; i++) {
 				if ((playerOne.getBoundsInParent().getCenterX() - 2 >= mapPlaces[i].tile.getX()
 						&& playerOne.getBoundsInParent().getCenterX() - 2 <= mapPlaces[i].tile.getX() + 32)
-						&& (playerOne.getBoundsInParent().getCenterY() >= mapPlaces[i].tile.getY()
-								&& playerOne.getBoundsInParent().getCenterY() <= mapPlaces[i].tile.getY() + 32)) {
+						&& (playerOne.getBoundsInParent().getCenterY() + 16 >= mapPlaces[i].tile.getY()
+								&& playerOne.getBoundsInParent().getCenterY() + 16 <= mapPlaces[i].tile.getY() + 32)) {
 					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
 					System.out.println("Player is on case " + playerOne.pos + "from player infos");
 					if (mapPlaces[i].isWalkable) {
 						playerOne.charachterAnimation.play();
 						playerOne.charachterAnimation.setOffsetY(32);
-						playerOne.moveX(-2);
 						playerOne.pos = mapPlaces[i].pos;
+						playerOne.moveX(-2);
 					} else {
 						playerOne.charachterAnimation.stop();
 					}
