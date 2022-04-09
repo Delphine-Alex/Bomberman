@@ -275,6 +275,10 @@ public class HelloApplication extends Application {
 						mapPlaces[i - 23].setStyle("1");
 					}
 
+					if (playerOne.pos == mapPlaces[i].pos || playerOne.pos == mapPlaces[i + 1].pos || playerOne.pos == mapPlaces[i - 1].pos || playerOne.pos == mapPlaces[i + 23].pos || playerOne.pos == mapPlaces[i - 23].pos)  {
+//						Handle death here
+					}
+					
 					playerOne.toFront();
 				}
 			}
