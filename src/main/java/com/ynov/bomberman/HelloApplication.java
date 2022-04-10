@@ -11,18 +11,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -263,6 +259,7 @@ public class HelloApplication extends Application {
 							&& onil.getBoundsInParent().getCenterY() + 16 <= mapPlaces[i].tile.getY() + 32)) {
 				
 				System.out.println(mapPlaces[i].pos);
+				onil.pos = mapPlaces[i].pos;
 				
 				ArrayList<Integer> mouvementAllow = new ArrayList<>();
 				if (mapPlaces[i - 1].isWalkable) {
@@ -409,6 +406,13 @@ public class HelloApplication extends Application {
 							|| playerOne.pos == mapPlaces[i - 1].pos || playerOne.pos == mapPlaces[i + 23].pos
 							|| playerOne.pos == mapPlaces[i - 23].pos) {
 //						Handle death here
+					}
+					
+					if (onil.pos == mapPlaces[i].pos || onil.pos == mapPlaces[i + 1].pos
+							|| onil.pos == mapPlaces[i - 1].pos || onil.pos == mapPlaces[i + 23].pos
+							|| onil.pos == mapPlaces[i - 23].pos) {
+//						Handle death here
+						System.out.println("Monster died");
 					}
 
 					playerOne.toFront();

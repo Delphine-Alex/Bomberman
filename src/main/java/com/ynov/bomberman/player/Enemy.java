@@ -18,6 +18,8 @@ public class Enemy extends Pane{
 	int count = 3;
 	int columns = 3;
 	
+	public int pos;
+	
 	public SpriteHandler enemyAnimation;
 	
 	public Enemy (ImageView imageView) {
