@@ -15,19 +15,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Map;
+=======
+import java.util.Timer;
+import java.util.TimerTask;
+>>>>>>> origin/dev
 
 import javafx.scene.Group;
 import javafx.animation.Timeline;
@@ -36,6 +38,7 @@ import com.ynov.bomberman.menu.Menu;
 import com.ynov.bomberman.menu.MenuItem;
 import com.ynov.bomberman.menu.Title;
 import com.ynov.bomberman.player.Character;
+import com.ynov.bomberman.player.Enemy;
 import com.ynov.bomberman.stage.Game;
 import com.ynov.bomberman.stage.Tile;
 
@@ -64,9 +67,13 @@ public class HelloApplication extends Application {
 	Group group1 = new Group();
 	int indexActiveSceneGame = 0;
 	private HashMap<KeyCode, Boolean> keys = new HashMap<>();
+	boolean isMouvement = false;
 
 //	Initialisation du joueur
 	Character playerOne = new Character(new ImageView(new Image("/RPGMaker.png")));
+
+//	Initialisation des ennemies
+	Enemy onil = new Enemy(new ImageView(new Image("/Ballom.png")));
 
 	static Pane root = new Pane();
 
@@ -166,6 +173,7 @@ public class HelloApplication extends Application {
 		}
 
 		group.getChildren().add(playerOne);
+		group.getChildren().add(onil);
 
 		Text text = new Text();
 		text.setText("Time");
@@ -179,7 +187,10 @@ public class HelloApplication extends Application {
 			@Override
 			public void handle(long now) {
 				characterMovement(mapPlaces);
-
+				if (!isMouvement){
+					enemyMovement(mapPlaces);
+				}
+				DeadHandler();
 				bombHandler(mapPlaces);
 			}
 		};
@@ -301,6 +312,124 @@ public class HelloApplication extends Application {
 		}
 	}
 
+//	enemyMovement prend en charge les mouvements des ennemies
+	public void enemyMovement(Tile[] mapPlaces) {
+
+		for (int i = 0; i < mapPlaces.length; i++) {
+			if ((onil.getBoundsInParent().getCenterX() >= mapPlaces[i].tile.getX()
+					&& onil.getBoundsInParent().getCenterX() <= mapPlaces[i].tile.getX() + 32)
+					&& (onil.getBoundsInParent().getCenterY() + 16 >= mapPlaces[i].tile.getY()
+							&& onil.getBoundsInParent().getCenterY() + 16 <= mapPlaces[i].tile.getY() + 32)) {
+				
+				System.out.println(mapPlaces[i].pos);
+				onil.pos = mapPlaces[i].pos;
+				
+				ArrayList<Integer> mouvementAllow = new ArrayList<>();
+				if (mapPlaces[i - 1].isWalkable) {
+					mouvementAllow.add(- 1);
+				}
+				if (mapPlaces[i + 1].isWalkable) {
+					mouvementAllow.add(+ 1);
+				}
+				if (mapPlaces[i + 23].isWalkable) {
+					mouvementAllow.add(+ 23);
+				}
+				if (mapPlaces[i - 23].isWalkable) {
+					mouvementAllow.add(- 23);
+				}
+				
+				int random = (int)(Math.random()*(mouvementAllow.size()));
+				int mouvementToDo = mouvementAllow.get(random);
+				
+				if (mouvementToDo == 23 ){
+					//onil.moveY(32);
+					Timer t = new Timer();
+				    TimerTask task = new TimerTask() {
+				      int i=0;
+				      public void run() {
+				    	  onil.moveY(2);
+				        if(i == 32) {
+				        	isMouvement = false;
+				        	t.cancel();
+				        }
+				        i += 2;
+				      }
+				    };
+				    
+				    isMouvement = true;
+				    t.schedule(task, new Date(), 50);
+
+				}
+				if (mouvementToDo == - 23 ){
+					Timer t = new Timer();
+				    TimerTask task = new TimerTask() {
+				      int i=0;
+				      public void run() {
+				    	  onil.moveY(- 2);
+				        if(i == 32) {
+				        	isMouvement = false;
+				        	t.cancel();
+				        }
+				        i += 2;
+				      }
+				    };
+				    
+				    isMouvement = true;
+				    t.schedule(task, new Date(), 50);
+				}
+				if (mouvementToDo == 1 ){
+					Timer t = new Timer();
+				    TimerTask task = new TimerTask() {
+				      int i=0;
+				      public void run() {
+				    	  onil.moveX(2);
+				        if(i == 32) {
+				        	isMouvement = false;
+				        	t.cancel();
+				        }
+				        i += 2;
+				      }
+				    };
+				    
+				    isMouvement = true;
+				    t.schedule(task, new Date(), 50);
+					
+				}
+				if (mouvementToDo == - 1 ){
+					Timer t = new Timer();
+				    TimerTask task = new TimerTask() {
+				      int i=0;
+				      public void run() {
+				    	  onil.moveX(- 2);
+				        if(i == 32) {
+				        	isMouvement = false;
+				        	t.cancel();
+				        }
+				        i += 2;
+				      }
+				    };
+				    
+				    isMouvement = true;
+				    t.schedule(task, new Date(), 50);
+			}	
+				break;
+				}
+		}
+	}
+	
+	public void DeadHandler() {
+		
+		if ((onil.getBoundsInParent().getCenterX() >= playerOne.getBoundsInParent().getCenterX()
+                && onil.getBoundsInParent().getCenterX() <= playerOne.getBoundsInParent().getCenterX() + 32)
+                && (onil.getBoundsInParent().getCenterY() >= playerOne.getBoundsInParent().getCenterY()
+                        && onil.getBoundsInParent().getCenterY() <= playerOne.getBoundsInParent().getCenterY()+ 32)) {
+		System.out.println("coucou");
+		
+		
+		}
+	}
+
+    
 //	bombHandler supporte la pose et l'explosion des bombes du joueur
 	public void bombHandler(Tile[] mapPlaces) {
 		if (playerOne.bombExplosed) {
@@ -336,10 +465,19 @@ public class HelloApplication extends Application {
 						mapPlaces[i - 23].setStyle("1");
 					}
 
-					if (playerOne.pos == mapPlaces[i].pos || playerOne.pos == mapPlaces[i + 1].pos || playerOne.pos == mapPlaces[i - 1].pos || playerOne.pos == mapPlaces[i + 23].pos || playerOne.pos == mapPlaces[i - 23].pos)  {
+					if (playerOne.pos == mapPlaces[i].pos || playerOne.pos == mapPlaces[i + 1].pos
+							|| playerOne.pos == mapPlaces[i - 1].pos || playerOne.pos == mapPlaces[i + 23].pos
+							|| playerOne.pos == mapPlaces[i - 23].pos) {
 //						Handle death here
 					}
 					
+					if (onil.pos == mapPlaces[i].pos || onil.pos == mapPlaces[i + 1].pos
+							|| onil.pos == mapPlaces[i - 1].pos || onil.pos == mapPlaces[i + 23].pos
+							|| onil.pos == mapPlaces[i - 23].pos) {
+//						Handle death here
+						System.out.println("Monster died");
+					}
+
 					playerOne.toFront();
 				}
 			}
