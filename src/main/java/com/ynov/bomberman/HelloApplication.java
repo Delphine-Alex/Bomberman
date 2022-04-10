@@ -5,7 +5,11 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -20,8 +24,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+<<<<<<< HEAD
+import java.util.Map;
+=======
 import java.util.Timer;
 import java.util.TimerTask;
+>>>>>>> origin/dev
 
 import javafx.scene.Group;
 import javafx.animation.Timeline;
@@ -44,10 +52,19 @@ public class HelloApplication extends Application {
 	List<Group> listGroups;
 	Group groupMenuPage;
 	Group groupGamePage;
+	Group groupScorePage;
 	Scene sceneMenu;
 	Scene sceneGameInitial;
+	Scene sceneScore;
+	Text score;
+	static int scoreint = 0;
+	String namePlayer;
+	TableView tableScore;
+	ArrayList<Map<String, Object>> scores;
 	Timeline tl;
+	Button buttonReturnMenu;
 	Group group = new Group();
+	Group group1 = new Group();
 	int indexActiveSceneGame = 0;
 	private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 	boolean isMouvement = false;
@@ -76,9 +93,9 @@ public class HelloApplication extends Application {
 		title.setTranslateX(50);
 		title.setTranslateY(200);
 		MenuItem startGame = new MenuItem("NEW GAME");
-		MenuItem highscore = new MenuItem("HIGHSCORE");
+		MenuItem highScore = new MenuItem("HIGHSCORE");
 		MenuItem exit = new MenuItem("EXIT");
-		Menu vbox = new Menu(startGame, highscore, exit);
+		Menu vbox = new Menu(startGame, highScore, exit);
 		vbox.setTranslateX(100);
 		vbox.setTranslateY(300);
 		inputName = new TextArea();
@@ -99,12 +116,36 @@ public class HelloApplication extends Application {
 		sceneGameInitial.setOnKeyPressed(event -> keys.put(event.getCode(), true));
 		sceneGameInitial.setOnKeyReleased(event -> keys.put(event.getCode(), false));
 		listScenes.add(sceneGameInitial);
+		//Score
+		groupScorePage= new Group();
+		groupScorePage=initScore();
+		sceneScore=new Scene(groupScorePage,WIDTH,HEIGHT,Color.GRAY);
 		stage.show();
 		startGame.button.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				stage.setScene(sceneGameInitial);
 				stage.show();
+			}
+		});
+		highScore.button.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				stage.setScene(sceneScore);
+				stage.show();
+			}
+		});
+		buttonReturnMenu.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				stage.setScene(sceneMenu);
+				stage.show();
+			}
+		});
+		exit.button.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				stage.close();
 			}
 		});
 
@@ -156,6 +197,28 @@ public class HelloApplication extends Application {
 
 		timer.start();
 		return group;
+	}
+	private Group initScore(){
+		tableScore= new TableView();
+		scores = new ArrayList<Map<String, Object>>();
+		TableColumn<Map, String> col1 = new TableColumn<>("Name");
+        col1.setCellValueFactory(new MapValueFactory<>("name"));
+
+        TableColumn<Map, String> col2 = new TableColumn<>("Score");
+        col2.setCellValueFactory(new MapValueFactory<>("score"));
+        
+        for (Map<String, Object> item:scores) {
+            tableScore.getItems().addAll(item);
+        }
+        tableScore.getColumns().add(col1);
+        tableScore.getColumns().add(col2);
+        tableScore.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableScore.setLayoutX(WIDTH/2);
+        tableScore.setLayoutY(HEIGHT/8);
+        group1.getChildren().add(tableScore);
+        buttonReturnMenu= new Button("Return to menu");
+        group1.getChildren().add(buttonReturnMenu);
+		return group1;
 	}
 
 //	characterMovement prend en charge les mouvements du joueur
@@ -432,6 +495,14 @@ public class HelloApplication extends Application {
 	private boolean isPress(KeyCode key) {
 		return keys.getOrDefault(key, false);
 	}
+	private void addScoreToTable() {
+        namePlayer = inputName.getText();
+        HashMap<String, Object> toAdd = new HashMap<>();
+        toAdd.put("userName", namePlayer);
+        toAdd.put("score", scoreint);
+        scores.add(toAdd);
+        tableScore.getItems().add(toAdd);
+    }
 
 	public static void main(String[] args) {
 		launch();
