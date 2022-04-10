@@ -35,6 +35,9 @@ public class Character extends Pane {
 	public boolean bombPlanted = false;
 	public boolean bombExplosed = false;
 	public Timer timerBomb;
+	
+	public Integer score = 0;
+	public boolean win = false;
 
 //	Character est le constructeur du personnage
 	public Character(ImageView imageView) {

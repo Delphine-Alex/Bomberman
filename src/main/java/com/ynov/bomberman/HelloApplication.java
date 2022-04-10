@@ -65,6 +65,7 @@ public class HelloApplication extends Application {
 	int indexActiveSceneGame = 0;
 	private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 	boolean isMouvement = false;
+	Text text = new Text();
 
 //	Initialisation du joueur
 	Character playerOne = new Character(new ImageView(new Image("/RPGMaker.png")));
@@ -113,6 +114,7 @@ public class HelloApplication extends Application {
 		sceneGameInitial.setOnKeyPressed(event -> keys.put(event.getCode(), true));
 		sceneGameInitial.setOnKeyReleased(event -> keys.put(event.getCode(), false));
 		listScenes.add(sceneGameInitial);
+		
 		//Score
 		groupScorePage= new Group();
 		groupScorePage=initScore();
@@ -172,29 +174,37 @@ public class HelloApplication extends Application {
 		group.getChildren().add(playerOne);
 		group.getChildren().add(onil);
 
-		Text text = new Text();
-		text.setText("Time");
+		
+//      Score
+		
+		text.setText("Score " + playerOne.score.toString());
 		text.setX(25);
 		text.setY(32);
 		group.getChildren().add(text);
 		text.setFill(Color.WHITE);
 		text.setFont(Font.font("Verdana", 25));
+		
+		
 //		Actions en boucle
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				characterMovement(mapPlaces);
-				if (!isMouvement){
-					enemyMovement(mapPlaces);
+				if (!playerOne.win) {
+					characterMovement(mapPlaces);
+					if (!isMouvement){
+						enemyMovement(mapPlaces);
+					}
+					DeadHandler();
+					bombHandler(mapPlaces);
 				}
-				DeadHandler();
-				bombHandler(mapPlaces);
 			}
 		};
 
 		timer.start();
 		return group;
 	}
+	
+	
 	private Group initScore(){
 		tableScore= new TableView();
 		scores = new ArrayList<Map<String, Object>>();
@@ -228,8 +238,8 @@ public class HelloApplication extends Application {
 						&& (playerOne.getBoundsInParent().getCenterY() - 2 + 16 >= mapPlaces[i].tile.getY()
 								&& playerOne.getBoundsInParent().getCenterY() - 2 + 16 <= mapPlaces[i].tile.getY()
 										+ 32)) {
-					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
-					System.out.println("Player is on case " + playerOne.pos + "from player infos");
+					//System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
+					//System.out.println("Player is on case " + playerOne.pos + "from player infos");
 					if (mapPlaces[i].isWalkable) {
 						playerOne.charachterAnimation.play();
 						playerOne.charachterAnimation.setOffsetY(96);
@@ -250,8 +260,8 @@ public class HelloApplication extends Application {
 						&& (playerOne.getBoundsInParent().getCenterY() + 2 + 16 >= mapPlaces[i].tile.getY()
 								&& playerOne.getBoundsInParent().getCenterY() + 2 + 16 <= mapPlaces[i].tile.getY()
 										+ 32)) {
-					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
-					System.out.println("Player is on case " + playerOne.pos + "from player infos");
+					//System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
+					//System.out.println("Player is on case " + playerOne.pos + "from player infos");
 					if (mapPlaces[i].isWalkable) {
 						playerOne.charachterAnimation.play();
 						playerOne.charachterAnimation.setOffsetY(0);
@@ -271,8 +281,8 @@ public class HelloApplication extends Application {
 						&& playerOne.getBoundsInParent().getCenterX() + 2 <= mapPlaces[i].tile.getX() + 32)
 						&& (playerOne.getBoundsInParent().getCenterY() + 16 >= mapPlaces[i].tile.getY()
 								&& playerOne.getBoundsInParent().getCenterY() + 16 <= mapPlaces[i].tile.getY() + 32)) {
-					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
-					System.out.println("Player is on case " + playerOne.pos + "from player infos");
+					//System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
+					//System.out.println("Player is on case " + playerOne.pos + "from player infos");
 					if (mapPlaces[i].isWalkable) {
 						playerOne.charachterAnimation.play();
 						playerOne.charachterAnimation.setOffsetY(64);
@@ -291,8 +301,8 @@ public class HelloApplication extends Application {
 						&& playerOne.getBoundsInParent().getCenterX() - 2 <= mapPlaces[i].tile.getX() + 32)
 						&& (playerOne.getBoundsInParent().getCenterY() + 16 >= mapPlaces[i].tile.getY()
 								&& playerOne.getBoundsInParent().getCenterY() + 16 <= mapPlaces[i].tile.getY() + 32)) {
-					System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
-					System.out.println("Player is on case " + playerOne.pos + "from player infos");
+					//System.out.println("Player is on case " + mapPlaces[i].pos + "from math");
+					//System.out.println("Player is on case " + playerOne.pos + "from player infos");
 					if (mapPlaces[i].isWalkable) {
 						playerOne.charachterAnimation.play();
 						playerOne.charachterAnimation.setOffsetY(32);
@@ -318,7 +328,7 @@ public class HelloApplication extends Application {
 					&& (onil.getBoundsInParent().getCenterY() + 16 >= mapPlaces[i].tile.getY()
 							&& onil.getBoundsInParent().getCenterY() + 16 <= mapPlaces[i].tile.getY() + 32)) {
 				
-				System.out.println(mapPlaces[i].pos);
+				// System.out.println(mapPlaces[i].pos);
 				onil.pos = mapPlaces[i].pos;
 				
 				ArrayList<Integer> mouvementAllow = new ArrayList<>();
@@ -339,7 +349,6 @@ public class HelloApplication extends Application {
 				int mouvementToDo = mouvementAllow.get(random);
 				
 				if (mouvementToDo == 23 ){
-					//onil.moveY(32);
 					Timer t = new Timer();
 				    TimerTask task = new TimerTask() {
 				      int i=0;
@@ -422,7 +431,6 @@ public class HelloApplication extends Application {
                         && onil.getBoundsInParent().getCenterY() <= playerOne.getBoundsInParent().getCenterY()+ 32)) {
 		System.out.println("coucou");
 		
-		
 		}
 	}
 
@@ -448,31 +456,46 @@ public class HelloApplication extends Application {
 
 					if (mapPlaces[i + 1].isBreakable) {
 						mapPlaces[i + 1].setStyle("1");
+						playerOne.score += 100;
+						text.setText("Score " + playerOne.score.toString());
 					}
 
 					if (mapPlaces[i - 1].isBreakable) {
 						mapPlaces[i - 1].setStyle("1");
+						playerOne.score += 100;
+						text.setText("Score " + playerOne.score.toString());
 					}
 
 					if (mapPlaces[i + 23].isBreakable) {
 						mapPlaces[i + 23].setStyle("1");
+						playerOne.score += 100;
+						text.setText("Score " + playerOne.score.toString());
 					}
 
 					if (mapPlaces[i - 23].isBreakable) {
 						mapPlaces[i - 23].setStyle("1");
+						playerOne.score += 100;
+						text.setText("Score " + playerOne.score.toString());
 					}
 
 					if (playerOne.pos == mapPlaces[i].pos || playerOne.pos == mapPlaces[i + 1].pos
 							|| playerOne.pos == mapPlaces[i - 1].pos || playerOne.pos == mapPlaces[i + 23].pos
 							|| playerOne.pos == mapPlaces[i - 23].pos) {
 //						Handle death here
+						
+						System.out.println(playerOne.score);
+						
 					}
 					
 					if (onil.pos == mapPlaces[i].pos || onil.pos == mapPlaces[i + 1].pos
 							|| onil.pos == mapPlaces[i - 1].pos || onil.pos == mapPlaces[i + 23].pos
 							|| onil.pos == mapPlaces[i - 23].pos) {
-//						Handle death here
-						System.out.println("Monster died");
+						
+						group.getChildren().remove(onil);
+						playerOne.win = true;
+						stage.setScene(sceneScore);
+						stage.show();
+						
 					}
 
 					playerOne.toFront();
