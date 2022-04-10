@@ -1,8 +1,11 @@
 package com.ynov.bomberman.player;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import com.ynov.bomberman.stage.Tile;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -24,6 +27,8 @@ public class Character extends Pane {
 	int width = 32;
 	int height = 32;
 	public SpriteHandler charachterAnimation;
+	
+	public int pos = 24;
 
 	public Circle bomb;
 	public boolean bombPlanted = false;
@@ -67,7 +72,7 @@ public class Character extends Pane {
 	}
 
 //	generateBombe permet de générer une bombe sur la tuile du personnage
-	public Circle generateBomb(ArrayList<Rectangle> mapPlaces) {
+	public Circle generateBomb(Tile[] mapPlaces) {
 		this.bombPlanted = true;
 
 		this.timerBomb = new Timer();
@@ -77,20 +82,28 @@ public class Character extends Pane {
 			public void run() {
 				bombPlanted = false;
 				bombExplosed = true;
-				System.out.println("Bomb explosed");
 
 				cancel();
 			}
 		};
-		this.timerBomb.schedule(task, 3000L);
+		this.timerBomb.schedule(task, 1500L);
 
-		for (Rectangle rectangle : mapPlaces) {
-			if (rectangle.intersects(this.getBoundsInParent().getCenterX() - 32,
-					this.getBoundsInParent().getCenterY() - 32, width, height)) {
-				this.bomb = new Circle(rectangle.getX() + 32 / 2, rectangle.getY() + 32 / 2, 10,
+		for (Tile tiles : mapPlaces) {
+			if (tiles.tile.intersects(this.getBoundsInParent().getCenterX(),
+					this.getBoundsInParent().getCenterY() + 16, width, height)) {
+				this.bomb = new Circle(tiles.tile.getX() + 32 / 2, tiles.tile.getY() + 32 / 2, 10,
 						new ImagePattern(new Image("/Bomb.png")));
+				break;
 			}
 		}
+
+//		for (int i = 0; i < mapPlaces.length -1; i++) {
+//			if (mapPlaces[i].tile.intersects(this.getBoundsInParent().getCenterX() - 32,
+//					this.getBoundsInParent().getCenterY() - 32, width, height)) {
+//				this.bomb = new Circle(mapPlaces[i].tile.getX() + 32 / 2, mapPlaces[i].tile.getY() + 32 / 2, 10,
+//						new ImagePattern(new Image("/Bomb.png")));
+//			}
+//		}
 
 		return this.bomb;
 	}
