@@ -29,6 +29,7 @@ public class Character extends Pane {
 	public SpriteHandler charachterAnimation;
 	
 	public int pos = 24;
+	public int bombPos = 24;
 
 	public Circle bomb;
 	public boolean bombPlanted = false;
@@ -93,6 +94,7 @@ public class Character extends Pane {
 					this.getBoundsInParent().getCenterY() + 16, width, height)) {
 				this.bomb = new Circle(tiles.tile.getX() + 32 / 2, tiles.tile.getY() + 32 / 2, 10,
 						new ImagePattern(new Image("/Bomb.png")));
+				this.bombPos = tiles.pos;
 				break;
 			}
 		}
