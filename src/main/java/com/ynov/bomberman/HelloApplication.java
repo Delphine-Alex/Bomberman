@@ -24,12 +24,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Map;
-=======
 import java.util.Timer;
 import java.util.TimerTask;
->>>>>>> origin/dev
 
 import javafx.scene.Group;
 import javafx.animation.Timeline;
