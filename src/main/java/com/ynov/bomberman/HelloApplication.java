@@ -20,9 +20,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.scene.Group;
 import javafx.animation.Timeline;
 
@@ -50,6 +54,7 @@ public class HelloApplication extends Application {
 	Group group = new Group();
 	int indexActiveSceneGame = 0;
 	private HashMap<KeyCode, Boolean> keys = new HashMap<>();
+	boolean isMouvement = false;
 
 //	Initialisation du joueur
 	Character playerOne = new Character(new ImageView(new Image("/RPGMaker.png")));
@@ -145,7 +150,9 @@ public class HelloApplication extends Application {
 			@Override
 			public void handle(long now) {
 				characterMovement(mapPlaces);
-				enemyMovement(mapPlaces);
+				if (!isMouvement){
+					enemyMovement(mapPlaces);
+				}
 				bombHandler(mapPlaces);
 			}
 		};
@@ -275,36 +282,131 @@ public class HelloApplication extends Application {
 				
 				if (mouvementToDo == 23 ){
 					//onil.moveY(32);
-					int pos = 0;
-					do {
-						onil.moveY(2);
-						pos += 2;
-					} while (pos != 32);
+					Timer t = new Timer();
+				    TimerTask task = new TimerTask() {
+				      int i=0;
+				      public void run() {
+				    	  onil.moveY(2);
+				        if(i == 32) {
+				        	isMouvement = false;
+				        	t.cancel();
+				        }
+				        i += 2;
+				      }
+				    };
+				    
+				    isMouvement = true;
+				    t.schedule(task, new Date(), 50);
+					
+//					TimerTask task = new TimerTask() {
+//				        public void run() {
+//				        System.out.println("mvt");
+//				        int pos = 0;
+//						do {
+//							onil.moveY(2);
+//							pos += 2;
+//						} while (pos != 32);
+//				        }
+//				    };
+//					Timer timer = new Timer();
+//					timer.schedule(task, 0, 5000);
+					
 				}
 				if (mouvementToDo == - 23 ){
-					//onil.moveY(- 32);
-					int pos = 0;
-					do {
-						onil.moveY(- 2);
-						pos += 2;
-					} while (pos != 32);
+					
+//					TimerTask task = new TimerTask() {
+//				        public void run() {
+//				        System.out.println("mvt");
+//				        int pos = 0;
+//						do {
+//							onil.moveY(- 2);
+//							pos += 2;
+//						} while (pos != 32);
+//				        }
+//				    };
+//					Timer timer = new Timer();
+//					timer.schedule(task, 0, 5000);
+					
+					Timer t = new Timer();
+				    TimerTask task = new TimerTask() {
+				      int i=0;
+				      public void run() {
+				    	  onil.moveY(- 2);
+				        if(i == 32) {
+				        	isMouvement = false;
+				        	t.cancel();
+				        }
+				        i += 2;
+				      }
+				    };
+				    
+				    isMouvement = true;
+				    t.schedule(task, new Date(), 50);
 				}
 				if (mouvementToDo == 1 ){
 					//onil.moveX(32);
-					int pos = 0;
-					do {
-						onil.moveX(2);
-						pos += 2;
-					} while (pos != 32);
+//					TimerTask task = new TimerTask() {
+//				        public void run() {
+//				        System.out.println("mvt");
+//				        int pos = 0;
+//						do {
+//							onil.moveX(2);
+//							pos += 2;
+//						} while (pos != 32);
+//				        }
+//				    };
+//					Timer timer = new Timer();
+//					timer.schedule(task, 0, 5000);
+					
+					Timer t = new Timer();
+				    TimerTask task = new TimerTask() {
+				      int i=0;
+				      public void run() {
+				    	  onil.moveX(2);
+				        if(i == 32) {
+				        	isMouvement = false;
+				        	t.cancel();
+				        }
+				        i += 2;
+				      }
+				    };
+				    
+				    isMouvement = true;
+				    t.schedule(task, new Date(), 50);
+					
 				}
 				if (mouvementToDo == - 1 ){
 					//onil.moveX(- 32);
-					int pos = 0;
-					do {
-						onil.moveX(-2);
-						pos += 2;
-					} while (pos != 32);
-				}
+//					TimerTask task = new TimerTask() {
+//				        public void run() {
+//				        System.out.println("mvt");
+//				        int pos = 0;
+//						do {
+//							onil.moveX(-2);
+//							pos += 2;
+//						} while (pos != 32);
+//					}
+//				        
+//				    };
+//					Timer timer = new Timer();
+//					timer.schedule(task, 0, 5000);
+					
+					Timer t = new Timer();
+				    TimerTask task = new TimerTask() {
+				      int i=0;
+				      public void run() {
+				    	  onil.moveX(- 2);
+				        if(i == 32) {
+				        	isMouvement = false;
+				        	t.cancel();
+				        }
+				        i += 2;
+				      }
+				    };
+				    
+				    isMouvement = true;
+				    t.schedule(task, new Date(), 50);
+			}
 	
 							
 				break;
@@ -312,6 +414,7 @@ public class HelloApplication extends Application {
 		}
 	}
 
+    
 //	bombHandler supporte la pose et l'explosion des bombes du joueur
 	public void bombHandler(Tile[] mapPlaces) {
 		if (playerOne.bombExplosed) {
