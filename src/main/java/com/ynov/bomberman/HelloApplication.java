@@ -189,18 +189,22 @@ public class HelloApplication extends Application {
 		AnimationTimer timer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				characterMovement(mapPlaces);
-				if (!isMouvement){
-					enemyMovement(mapPlaces);
+				if (!playerOne.win) {
+					characterMovement(mapPlaces);
+					if (!isMouvement){
+						enemyMovement(mapPlaces);
+					}
+					DeadHandler();
+					bombHandler(mapPlaces);
 				}
-				DeadHandler();
-				bombHandler(mapPlaces);
 			}
 		};
 
 		timer.start();
 		return group;
 	}
+	
+	
 	private Group initScore(){
 		tableScore= new TableView();
 		scores = new ArrayList<Map<String, Object>>();
@@ -427,7 +431,6 @@ public class HelloApplication extends Application {
                         && onil.getBoundsInParent().getCenterY() <= playerOne.getBoundsInParent().getCenterY()+ 32)) {
 		System.out.println("coucou");
 		
-		
 		}
 	}
 
@@ -481,13 +484,18 @@ public class HelloApplication extends Application {
 //						Handle death here
 						
 						System.out.println(playerOne.score);
+						
 					}
 					
 					if (onil.pos == mapPlaces[i].pos || onil.pos == mapPlaces[i + 1].pos
 							|| onil.pos == mapPlaces[i - 1].pos || onil.pos == mapPlaces[i + 23].pos
 							|| onil.pos == mapPlaces[i - 23].pos) {
-//						Handle death here
-						System.out.println("Monster died");
+						
+						group.getChildren().remove(onil);
+						playerOne.win = true;
+						stage.setScene(sceneScore);
+						stage.show();
+						
 					}
 
 					playerOne.toFront();

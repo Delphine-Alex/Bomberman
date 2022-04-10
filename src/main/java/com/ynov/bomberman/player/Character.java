@@ -37,6 +37,7 @@ public class Character extends Pane {
 	public Timer timerBomb;
 	
 	public Integer score = 0;
+	public boolean win = false;
 
 //	Character est le constructeur du personnage
 	public Character(ImageView imageView) {
