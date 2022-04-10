@@ -153,6 +153,7 @@ public class HelloApplication extends Application {
 				if (!isMouvement){
 					enemyMovement(mapPlaces);
 				}
+				DeadHandler();
 				bombHandler(mapPlaces);
 			}
 		};
@@ -297,36 +298,9 @@ public class HelloApplication extends Application {
 				    
 				    isMouvement = true;
 				    t.schedule(task, new Date(), 50);
-					
-//					TimerTask task = new TimerTask() {
-//				        public void run() {
-//				        System.out.println("mvt");
-//				        int pos = 0;
-//						do {
-//							onil.moveY(2);
-//							pos += 2;
-//						} while (pos != 32);
-//				        }
-//				    };
-//					Timer timer = new Timer();
-//					timer.schedule(task, 0, 5000);
-					
+
 				}
 				if (mouvementToDo == - 23 ){
-					
-//					TimerTask task = new TimerTask() {
-//				        public void run() {
-//				        System.out.println("mvt");
-//				        int pos = 0;
-//						do {
-//							onil.moveY(- 2);
-//							pos += 2;
-//						} while (pos != 32);
-//				        }
-//				    };
-//					Timer timer = new Timer();
-//					timer.schedule(task, 0, 5000);
-					
 					Timer t = new Timer();
 				    TimerTask task = new TimerTask() {
 				      int i=0;
@@ -344,20 +318,6 @@ public class HelloApplication extends Application {
 				    t.schedule(task, new Date(), 50);
 				}
 				if (mouvementToDo == 1 ){
-					//onil.moveX(32);
-//					TimerTask task = new TimerTask() {
-//				        public void run() {
-//				        System.out.println("mvt");
-//				        int pos = 0;
-//						do {
-//							onil.moveX(2);
-//							pos += 2;
-//						} while (pos != 32);
-//				        }
-//				    };
-//					Timer timer = new Timer();
-//					timer.schedule(task, 0, 5000);
-					
 					Timer t = new Timer();
 				    TimerTask task = new TimerTask() {
 				      int i=0;
@@ -376,21 +336,6 @@ public class HelloApplication extends Application {
 					
 				}
 				if (mouvementToDo == - 1 ){
-					//onil.moveX(- 32);
-//					TimerTask task = new TimerTask() {
-//				        public void run() {
-//				        System.out.println("mvt");
-//				        int pos = 0;
-//						do {
-//							onil.moveX(-2);
-//							pos += 2;
-//						} while (pos != 32);
-//					}
-//				        
-//				    };
-//					Timer timer = new Timer();
-//					timer.schedule(task, 0, 5000);
-					
 					Timer t = new Timer();
 				    TimerTask task = new TimerTask() {
 				      int i=0;
@@ -406,11 +351,21 @@ public class HelloApplication extends Application {
 				    
 				    isMouvement = true;
 				    t.schedule(task, new Date(), 50);
-			}
-	
-							
+			}	
 				break;
 				}
+		}
+	}
+	
+	public void DeadHandler() {
+		
+		if ((onil.getBoundsInParent().getCenterX() >= playerOne.getBoundsInParent().getCenterX()
+                && onil.getBoundsInParent().getCenterX() <= playerOne.getBoundsInParent().getCenterX() + 32)
+                && (onil.getBoundsInParent().getCenterY() >= playerOne.getBoundsInParent().getCenterY()
+                        && onil.getBoundsInParent().getCenterY() <= playerOne.getBoundsInParent().getCenterY()+ 32)) {
+		System.out.println("coucou");
+		
+		
 		}
 	}
 
