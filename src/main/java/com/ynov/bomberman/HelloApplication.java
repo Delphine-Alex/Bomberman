@@ -59,7 +59,6 @@ public class HelloApplication extends Application {
 	Scene sceneGameInitial;
 	Scene sceneScore;
 	Text score;
-	static int scoreint = 0;
 	String namePlayer;
 	TableView tableScore;
 	ArrayList<Map<String, Object>> scores;
@@ -153,6 +152,7 @@ public class HelloApplication extends Application {
 				stage.close();
 			}
 		});
+		
 	}
 
 	private Group initGame() {
@@ -195,6 +195,7 @@ public class HelloApplication extends Application {
 //		Actions en boucle
 		AnimationTimer timer = new AnimationTimer() {
 			long lastTick = 0;
+			private Button buttonToHighScore;
 			@Override
 			public void handle(long now) {
 				if (!playerOne.win) {
@@ -207,13 +208,16 @@ public class HelloApplication extends Application {
 				}
 				if (lastTick == 0 && gameOver) {
 					lastTick = now;
-					buttonToHighScore= new Button("HighScore");
+					addScoreToTable();
+					this.buttonToHighScore= new Button("HighScore");
 					buttonToHighScore.setLayoutX(280);
 					buttonToHighScore.setLayoutY(300);
 					buttonToHighScore.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.ITALIC, 30));
 					buttonToHighScore.setEffect(new InnerShadow(10, Color.DARKRED));
 					group.getChildren().add(buttonToHighScore);
-					buttonToHighScore.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+					group.getChildren().remove(onil);
+					group.getChildren().remove(playerOne);
+					this.buttonToHighScore.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
 						@Override
 						public void handle(ActionEvent event) {
 							stage.setScene(sceneScore);
@@ -225,24 +229,7 @@ public class HelloApplication extends Application {
 					return;
 				}
 
-				if (now - lastTick > 1000000000 / 5 && gameOver) {
-					lastTick = now;
-					buttonToHighScore= new Button("HighScore");
-					buttonToHighScore.setLayoutX(280);
-					buttonToHighScore.setLayoutY(300);
-					buttonToHighScore.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.ITALIC, 30));
-					buttonToHighScore.setEffect(new InnerShadow(10, Color.DARKRED));
-					group.getChildren().add(buttonToHighScore);
-					buttonToHighScore.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
-						@Override
-						public void handle(ActionEvent event) {
-							stage.setScene(sceneScore);
-							stage.show();
-						}
-					});
-
-					tick(gc);
-				}
+				
 			}
 		};
 		timer.start();
@@ -471,6 +458,7 @@ public class HelloApplication extends Application {
 			gc.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.ITALIC, 55));
 			gc.setEffect(new InnerShadow(10, Color.DARKRED));
 			gc.fillText("GAME OVER", 200, 250);
+			
 			return;
 		}
 	}
@@ -487,6 +475,7 @@ public class HelloApplication extends Application {
     
 //	bombHandler supporte la pose et l'explosion des bombes du joueur
 	public void bombHandler(Tile[] mapPlaces) {
+		this.stage= new Stage();
 		if (playerOne.bombExplosed) {
 
 //			multiple de 23
@@ -532,9 +521,12 @@ public class HelloApplication extends Application {
 							|| playerOne.pos == mapPlaces[i - 1].pos || playerOne.pos == mapPlaces[i + 23].pos
 							|| playerOne.pos == mapPlaces[i - 23].pos) {
 //						Handle death here
-						
+						group.getChildren().remove(playerOne);
+						group.getChildren().remove(onil);
+						addScoreToTable();
 						System.out.println(playerOne.score);
-						
+						stage.setScene(sceneScore);
+						stage.show();
 					}
 					
 					if (onil.pos == mapPlaces[i].pos || onil.pos == mapPlaces[i + 1].pos
@@ -542,6 +534,8 @@ public class HelloApplication extends Application {
 							|| onil.pos == mapPlaces[i - 23].pos) {
 						
 						group.getChildren().remove(onil);
+						group.getChildren().remove(playerOne);
+						addScoreToTable();
 						playerOne.win = true;
 						stage.setScene(sceneScore);
 						stage.show();
@@ -569,7 +563,7 @@ public class HelloApplication extends Application {
         namePlayer = inputName.getText();
         HashMap<String, Object> toAdd = new HashMap<>();
         toAdd.put("userName", namePlayer);
-        toAdd.put("score", scoreint);
+        toAdd.put("score", playerOne.score);
         scores.add(toAdd);
         tableScore.getItems().add(toAdd);
     }
