@@ -5,17 +5,22 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -54,19 +59,19 @@ public class HelloApplication extends Application {
 	Scene sceneGameInitial;
 	Scene sceneScore;
 	Text score;
-	static int scoreint = 0;
 	String namePlayer;
 	TableView tableScore;
 	ArrayList<Map<String, Object>> scores;
 	Timeline tl;
 	Button buttonReturnMenu;
+	Button buttonToHighScore;
 	Group group = new Group();
 	Group group1 = new Group();
 	int indexActiveSceneGame = 0;
 	private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 	boolean isMouvement = false;
 	Text text = new Text();
-
+	static boolean gameOver = false;
 //	Initialisation du joueur
 	Character playerOne = new Character(new ImageView(new Image("/RPGMaker.png")));
 
@@ -106,7 +111,7 @@ public class HelloApplication extends Application {
 		sceneMenu = new Scene(groupMenuPage, WIDTH, HEIGHT);
 		stage.setTitle("BOMBERMAN");
 		stage.setScene(sceneMenu);
-
+		
 		// Game
 		groupGamePage = initGame();
 		listGroups.add(groupGamePage);
@@ -147,7 +152,7 @@ public class HelloApplication extends Application {
 				stage.close();
 			}
 		});
-
+		
 	}
 
 	private Group initGame() {
@@ -184,9 +189,13 @@ public class HelloApplication extends Application {
 		text.setFill(Color.WHITE);
 		text.setFont(Font.font("Verdana", 25));
 		
-		
+		Canvas c = new Canvas(WIDTH,HEIGHT);
+		GraphicsContext gc = c.getGraphicsContext2D();
+		group.getChildren().add(c);
 //		Actions en boucle
 		AnimationTimer timer = new AnimationTimer() {
+			long lastTick = 0;
+			private Button buttonToHighScore;
 			@Override
 			public void handle(long now) {
 				if (!playerOne.win) {
@@ -197,14 +206,35 @@ public class HelloApplication extends Application {
 					DeadHandler();
 					bombHandler(mapPlaces);
 				}
+				if (lastTick == 0 && gameOver) {
+					lastTick = now;
+					addScoreToTable();
+					this.buttonToHighScore= new Button("HighScore");
+					buttonToHighScore.setLayoutX(280);
+					buttonToHighScore.setLayoutY(300);
+					buttonToHighScore.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.ITALIC, 30));
+					buttonToHighScore.setEffect(new InnerShadow(10, Color.DARKRED));
+					group.getChildren().add(buttonToHighScore);
+					group.getChildren().remove(onil);
+					group.getChildren().remove(playerOne);
+					this.buttonToHighScore.setOnAction((EventHandler<ActionEvent>) new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							stage.setScene(sceneScore);
+							stage.show();
+						}
+					});
+
+					tick(gc);
+					return;
+				}
+
+				
 			}
 		};
-
 		timer.start();
 		return group;
 	}
-	
-	
 	private Group initScore(){
 		tableScore= new TableView();
 		scores = new ArrayList<Map<String, Object>>();
@@ -422,21 +452,30 @@ public class HelloApplication extends Application {
 				}
 		}
 	}
-	
+	public void tick(GraphicsContext gc) {
+		if (gameOver) {
+			gc.setFill(Color.RED);
+			gc.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, FontPosture.ITALIC, 55));
+			gc.setEffect(new InnerShadow(10, Color.DARKRED));
+			gc.fillText("GAME OVER", 200, 250);
+			
+			return;
+		}
+	}
 	public void DeadHandler() {
 		
 		if ((onil.getBoundsInParent().getCenterX() >= playerOne.getBoundsInParent().getCenterX()
                 && onil.getBoundsInParent().getCenterX() <= playerOne.getBoundsInParent().getCenterX() + 32)
                 && (onil.getBoundsInParent().getCenterY() >= playerOne.getBoundsInParent().getCenterY()
                         && onil.getBoundsInParent().getCenterY() <= playerOne.getBoundsInParent().getCenterY()+ 32)) {
-		System.out.println("coucou");
-		
+			gameOver = true;
 		}
 	}
 
     
 //	bombHandler supporte la pose et l'explosion des bombes du joueur
 	public void bombHandler(Tile[] mapPlaces) {
+		this.stage= new Stage();
 		if (playerOne.bombExplosed) {
 
 //			multiple de 23
@@ -482,9 +521,12 @@ public class HelloApplication extends Application {
 							|| playerOne.pos == mapPlaces[i - 1].pos || playerOne.pos == mapPlaces[i + 23].pos
 							|| playerOne.pos == mapPlaces[i - 23].pos) {
 //						Handle death here
-						
+						group.getChildren().remove(playerOne);
+						group.getChildren().remove(onil);
+						addScoreToTable();
 						System.out.println(playerOne.score);
-						
+						stage.setScene(sceneScore);
+						stage.show();
 					}
 					
 					if (onil.pos == mapPlaces[i].pos || onil.pos == mapPlaces[i + 1].pos
@@ -492,6 +534,8 @@ public class HelloApplication extends Application {
 							|| onil.pos == mapPlaces[i - 23].pos) {
 						
 						group.getChildren().remove(onil);
+						group.getChildren().remove(playerOne);
+						addScoreToTable();
 						playerOne.win = true;
 						stage.setScene(sceneScore);
 						stage.show();
@@ -519,7 +563,7 @@ public class HelloApplication extends Application {
         namePlayer = inputName.getText();
         HashMap<String, Object> toAdd = new HashMap<>();
         toAdd.put("userName", namePlayer);
-        toAdd.put("score", scoreint);
+        toAdd.put("score", playerOne.score);
         scores.add(toAdd);
         tableScore.getItems().add(toAdd);
     }
